@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to CineConnect</title>
+    <style>
+        /* Custom styles */
+        body {
+            background-image: url('im.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn-large {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: white; /* White color for headings */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">Welcome to CineConnect!</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <a href="/signup" class="btn btn-primary btn-lg btn-block btn-large">Sign Up</a>
+            <a href="/login" class="btn btn-dark btn-lg btn-block btn-large">Login</a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery (for Bootstrap functionality) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Script to show error alert if message exists -->
+<script>
+    $(document).ready(function() {
+        var message = "{{ message }}"; // Get the message from Flask template
+        if (message) {
+            // Show alert with the error message
+            $('.container').prepend('<div class="alert alert-danger" role="alert">' + message + '</div>');
+        }
+    });
+</script>
+
+</body>
+</html>
+

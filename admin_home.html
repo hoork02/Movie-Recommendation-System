@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add your custom CSS styles here -->
+    <style>
+        /* Add your custom styles here */
+        body {
+            background-image: url('col.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .user-options {
+            margin-bottom: 20px;
+        }
+
+        .movies-table {
+            width: 100%;
+        }
+
+        .movies-table th,
+        .movies-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .movies-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a href="{{ url_for('home') }}" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+                        viewBox="0 0 24 24">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    CineConnect
+                </a>
+                <!-- Admin Profile Option -->
+                <a href="{{ url_for('admin_profile') }}" class="btn btn-outline-primary" style="margin-right: 1px;">Admin Profile</a>
+                <!-- User Profile Option -->
+                <a href="{{ url_for('user_profile') }}" class="btn btn-outline-primary" style="margin-right: 1px;">User Profile</a>
+                <!-- Recommendations Option -->
+                <a href="{{ url_for('recommendations') }}" class="btn btn-outline-primary">Recommendations</a>
+                <a href="{{ url_for('community_chat') }}" class="btn btn-outline-primary">Community Chat</a>
+                <a href="{{ url_for('wishlist') }}" class="btn btn-outline-primary">Wishlist</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="font-weight-light">Welcome to Our Movie Collection</h1>
+                    <p class="lead text-muted">Discover a vast selection of movies. Explore, rate, and find your favorites!</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="search-bar">
+                <form method="GET" action="{{ url_for('search') }}" class="form-inline">
+                    <input type="text" name="query" placeholder="Search movies..." class="form-control mr-2">
+                    <button type="submit" class="btn btn-primary mr-2">Search</button>
+                    <div class="dropdown mr-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="genreDropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Genre
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="genreDropdown">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Comedy</a>
+                            <a class="dropdown-item" href="#">Drama</a>
+                            <!-- Add more genres as needed -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="movies-table">
+                <table class="table">
+                    <!-- Table headers -->
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Title</th>
+                            <th>Length (Minutes)</th>
+                            <th>Language</th>
+                            <th>Rate and Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movie in movies.items %}
+                        <tr>
+                            <td>{{ movies.page * movies.per_page - movies.per_page + loop.index }}</td>
+                            <td>{{ movie.title }}</td>
+                            <td>{{ movie.length }}</td>
+                            <td>{{ movie.language }}</td>
+                            <td>
+                                <a href="{{ url_for('movie_details', movie_id=movie.movieID) }}"
+                                    class="btn btn-dark">Rate and Comment</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if movies.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('home', page=movies.prev_num) }}">Previous</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+                    {% for num in movies.iter_pages() %}
+                    {% if num %}
+                    <li class="page-item {% if num == movies.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('home', page=num) }}">{{ num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if movies.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('home', page=movies.next_num) }}">Next</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="text-muted py-5">
+        <div class="container">
+            <p class="float-right mb-1">
+                <a href="#">Back to top</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Movie</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a href="{{ url_for('home') }}" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+                        viewBox="0 0 24 24">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Cineconnect
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="container mt-5">
+        <h1 class="mb-4">Insert Movie</h1>
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <div class="form-group form-section">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter movie title"
+                    required>
+            </div>
+            <div class="form-group form-section">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3"
+                    placeholder="Enter movie description" required></textarea>
+            </div>
+            <div class="form-group form-section">
+                <label for="releaseDate">Release Date</label>
+                <input type="date" class="form-control" id="releaseDate" name="releaseDate" required>
+            </div>
+            <div class="form-group form-section">
+                <label for="language">Language</label>
+                <input type="text" class="form-control" id="language" name="language" placeholder="Enter movie language"
+                    required>
+            </div>
+            <div class="form-group form-section">
+                <label for="length">Length (in minutes)</label>
+                <input type="number" class="form-control" id="length" name="length"
+                    placeholder="Enter movie length in minutes" required>
+            </div>
+
+            <!-- Actors -->
+            <div class="form-group form-section">
+                <label for="actors">Actors</label>
+                <div id="actorsList">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="actors[]" placeholder="Enter actor name">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary add-actor-btn" type="button">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directors -->
+            <div class="form-group form-section">
+                <label for="directors">Directors</label>
+                <div id="directorsList">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="directors[]" placeholder="Enter director name">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary add-director-btn" type="button">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Producers -->
+            <div class="form-group form-section">
+                <label for="producers">Producers</label>
+                <div id="producersList">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="producers[]" placeholder="Enter producer name">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary add-producer-btn" type="button">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Genres -->
+            <div class="form-group form-section">
+                <label for="genres">Genres</label>
+                <div id="genresList">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="genres[]" placeholder="Enter genre">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary add-genre-btn" type="button">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const addInputField = (listId, inputName) => {
+                const list = document.getElementById(listId);
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group mb-2';
+                inputGroup.innerHTML = `
+                    <input type="text" class="form-control" name="${inputName}[]" placeholder="Enter ${inputName} name">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary remove-btn" type="button">Remove</button>
+                    </div>`;
+                list.appendChild(inputGroup);
+                inputGroup.querySelector('.remove-btn').addEventListener('click', () => {
+                    list.removeChild(inputGroup);
+                });
+            };
+
+            // Add event listeners for adding input fields dynamically
+            document.querySelector('.add-actor-btn').addEventListener('click', () => {
+                addInputField('actorsList', 'actors');
+            });
+
+            document.querySelector('.add-director-btn').addEventListener('click', () => {
+                addInputField('directorsList', 'directors');
+            });
+
+            document.querySelector('.add-producer-btn').addEventListener('click', () => {
+                addInputField('producersList', 'producers');
+            });
+
+            document.querySelector('.add-genre-btn').addEventListener('click', () => {
+                addInputField('genresList', 'genres');
+            });
+        });
+    </script>
+</body>
+
+</html>

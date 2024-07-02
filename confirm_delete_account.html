@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account Confirmation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Delete Account Confirmation</h1>
+        <p>Are you sure you want to delete your account?</p>
+        <form action="{{ url_for('delete_own_account') }}" method="POST">
+            <button type="submit" class="btn btn-danger">Delete Account</button>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+
+</html>

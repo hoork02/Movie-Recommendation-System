@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a href="{{ url_for('home') }}" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+                        viewBox="0 0 24 24">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Cineconnect
+                </a>
+                <form action="{{ url_for('delete_own_account') }}" method="post">
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</button>
+                </form>
+                <form action="{{ url_for('logout') }}" method="post" class="ml-auto">
+                    <button type="submit" class="btn btn-outline-primary">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+    
+    
+    
+    <div class="container">
+        <h1 class="text-center">User Profile</h1>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('user_profile') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" class="form-control" id="age" name="age" value="{{ user.age }}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="show-hide-password" placeholder="New Password">
+                    <button class="btn btn-outline-secondary" type="button" id="show-hide-password" onclick="togglePasswordVisibility(this, 'password')">
+                        <i class="bi bi-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm New Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="confirm-password" name="confirm-password" aria-describedby="show-hide-confirm-password" placeholder="Confirm New Password">
+                    <button class="btn btn-outline-secondary" type="button" id="show-hide-confirm-password" onclick="togglePasswordVisibility(this, 'confirm-password')">
+                        <i class="bi bi-eye-slash"></i>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-Mnh8UoSo8IHlStjzL/DTidOwUXh0tLSKKtvooKUzntZzPCzB05ZGY4jVACkRQCNI" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgZQUb0d2Bjbjfmxtb4vYTwsYXBonsn2Qk/0Q1P1W5h0GAtHN2Q" crossorigin="anonymous"></script>
+
+    <script>
+        function togglePasswordVisibility(button, inputId) {
+            var passwordInput = document.getElementById(inputId);
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                button.innerHTML = '<i class="bi bi-eye"></i>';
+            } else {
+                passwordInput.type = "password";
+                button.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            }
+        }
+    </script>
+</body>
+
+</html>

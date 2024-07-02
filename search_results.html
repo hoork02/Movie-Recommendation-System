@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - CineConnect</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add your custom styles here */
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .movies-table {
+            width: 100%;
+        }
+
+        .movies-table th,
+        .movies-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .movies-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="navbar navbar-dark bg-dark shadow-sm">
+                <div class="container">
+                    <a href="{{ url_for('home') }}" class="navbar-brand d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            aria-hidden="true" class="mr-2" viewBox="0 0 24 24">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                            </path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        CineConnect
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="font-weight-light">Search Results</h1>
+                    <p class="lead text-muted">Results for "{{ query }}"</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="movies-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sr</th>
+                        <th>Title</th>
+                        <th>Length (Minutes)</th>
+                        <th>Language</th>
+                        <th>Rate and Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if movies %}
+                    {% for movie in movies %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ movie.title }}</td>
+                        <td>{{ movie.length }}</td>
+                        <td>{{ movie.language }}</td>
+                        <td>
+                            <a href="{{ url_for('movie_details', movie_id=movie.movieID) }}" class="btn btn-dark">Rate and Comment</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No movies found for "{{ query }}"</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-Mnh8UoSo8IHlStjzL/DTidOwUXh0tLSKKtvooKUzntZzPCzB05ZGY4jVACkRQCNI"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
